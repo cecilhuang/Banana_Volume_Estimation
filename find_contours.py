@@ -16,7 +16,7 @@ def canny_edge(in_filename):
     edges_high_thresh = cv2.Canny(gray_filtered, 60, 120)
     # Stacking the images to print them together
     # For comparison
-    images = np.hstack((img, edges, edges_high_thresh))
+    # images = np.hstack((img, edges, edges_high_thresh))
     # Output the resulting
 
     # cv2.imwrite('images/canny_'+ \
@@ -35,7 +35,7 @@ def contours_metadata(contours):
     for c in contours:
         if cv2.contourArea(c)>200.0:
             cnts_index.append(c)
-            cnts_perimeter.append(cv2.arcLength(c,True))
+            cnts_perimeter.append(cv2.arcLength(c,False))
             cnts_area.append(cv2.contourArea(c))
     contours_data['index']=cnts_index
     contours_data['perimeter']=cnts_perimeter
@@ -70,7 +70,6 @@ def BananaContours():
     for filename in os.listdir(directory):
         if filename.endswith(".jpg") or filename.endswith(".png"):
             files.append(os.path.join(directory, filename))
-    cnt_with_area =[]
 
     banana_volume_list=[]
 
@@ -112,15 +111,17 @@ def BananaContours():
         result = cv2.drawContours(cv2.imread(read_filename), cnt_with_area, -1, (0,0,255), 2)
         cv2.imwrite(out_filename, result)
 
-        ## 畫圖
-        avg_area=total_area / len(cnt_with_area)
-        banana_volume=sqrt(avg_area)**3
-        banana_volume_list.append(banana_volume)
-        x = list(range(1, len(banana_volume_list)+1))
-        y = banana_volume_list
-        plt.scatter(x, y)
-        plt.savefig("scatter.png")
+		
+		avg_area=total_area / len(cnt_with_area)
+		banana_volume=sqrt(avg_area)**3
+		banana_volume_list.append(banana_volume)
+	
+	## 畫圖
+	x = list(range(1, len(banana_volume_list)+1))
+	y = banana_volume_list	
+	plt.scatter(x, y)
+	plt.savefig("scatter.png")
 
-        # plt.show()
+    # plt.show()
 
     print(banana_volume_list)
